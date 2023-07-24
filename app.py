@@ -1,20 +1,43 @@
 import streamlit as st
+from custom_connection import ApiConnection
+from dataframe import extract_data
+from auth import getToken
+import pandas as pd
+
 
 # Title of the app
-st.title('My Streamlit App')
+st.title('Stremlit meets Spotify')
+access_token = getToken()
+conn = st.experimental_connection(
+    "spotify-api", type=ApiConnection, token=access_token)
+# print(extract_data(conn.get_spotify_artist_id('radio head')))
 
-# A simple text display
-st.write('Welcome to my first Streamlit app!')
+# create dataframe to show retrieved data
+columns = [
+    "name",
+    "popularity",
+    "followers",
+    "genres",
+    "external_url",
+]
+data = pd.DataFrame(columns=columns)
+data['popularity'] = data['popularity'].astype(float)
+data['followers'] = data['followers'].astype(int)
+if 'df' not in st.session_state:
+    st.session_state.df = data
 
-# An example of interactive widgets
-name = st.text_input('Enter your name:', 'John Doe')
-st.write(f'Hello, {name}!')
+name_input = st.text_input("Enter an artist name:")
+col1, col2, col3, col4, col5 = st.columns(5)
+with col3:
+    button_clicked = st.button("Submit")
 
-# A plot using Matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
+if button_clicked and name_input != '':
+    data = conn.get_spotify_artist(name_input)
+    new_row = extract_data(data)
+    new_df = pd.DataFrame([new_row])
+    st.session_state.df = pd.concat(
+        [st.session_state.df, new_df], ignore_index=True)
+    name_input = ""
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
-plt.plot(x, y)
-st.pyplot(plt)
+if not st.session_state.df.empty:
+    st.dataframe(st.session_state.df)
