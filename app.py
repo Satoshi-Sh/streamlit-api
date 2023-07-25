@@ -10,10 +10,11 @@ import seaborn as sns
 
 # Title of the app
 st.title('Stremlit meets Spotify')
+st.write("Visualize data from Spotify API")
+
 access_token = getToken()
 conn = st.experimental_connection(
     "spotify-api", type=ApiConnection, token=access_token)
-
 
 # create dataframe to show retrieved data
 columns = [
@@ -29,18 +30,22 @@ data['followers'] = data['followers'].astype(int)
 if 'df' not in st.session_state:
     st.session_state.df = data
 
-name_input = st.text_input("Enter an artist name:")
+
+def get_data():
+    if name_input != '':
+        data = conn.get_spotify_artist(name_input)
+        new_row = extract_data(data)
+        new_df = pd.DataFrame([new_row])
+        st.session_state.df = pd.concat(
+            [st.session_state.df, new_df], ignore_index=True).sort_values(by=["popularity", 'followers'], ascending=True).reset_index(drop=True, inplace=False)
+        st.session_state['input'] = ""
+
+
+name_input = st.text_input("Enter an artist name:", key='input')
 col1, col2, col3, col4, col5 = st.columns(5)
 with col3:
-    button_clicked = st.button("Submit")
+    button_clicked = st.button("Submit", on_click=get_data)
 
-if button_clicked and name_input != '':
-    data = conn.get_spotify_artist(name_input)
-    new_row = extract_data(data)
-    new_df = pd.DataFrame([new_row])
-    st.session_state.df = pd.concat(
-        [st.session_state.df, new_df], ignore_index=True).sort_values(by=["popularity", 'followers'], ascending=True)
-    name_input = ""
 
 if not st.session_state.df.empty:
     st.dataframe(st.session_state.df)
@@ -55,7 +60,7 @@ if not st.session_state.df.empty:
 
     # Plot the line plot on ax1
     sns.pointplot(
-        data=st.session_state.df, x='name', y='followers', ax=ax1, labe='followers')
+        data=st.session_state.df, x='name', y='followers', ax=ax1, label='followers')
 
     # Create the secondary y-axis on ax2
     ax2 = ax1.twinx()
@@ -63,6 +68,14 @@ if not st.session_state.df.empty:
     # Plot the bar plot on ax2
     sns.barplot(data=st.session_state.df, x='name',
                 y='popularity', alpha=0.5, ax=ax2, label='popularity')
-
+    ax1.set_xticklabels(st.session_state.df['name'], rotation=45)
     # Show the plot
     st.pyplot(fig)
+    st.write("*Bar shows popularity and line shows followers number")
+
+    def clear_all():
+        st.session_state["df"] = data
+        st.session_state['input'] = ""
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col3:
+        button = st.button("Reset", on_click=clear_all)
