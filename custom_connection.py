@@ -34,16 +34,16 @@ class ApiConnection(ExperimentalBaseConnection):
             # Handle error scenarios here
             return None
 
-    def get_artists(self, artist_id: str):
-        # Construct the API URL
-        api_url = f"https://api.spotify.com/v1/artists/{artist_id}"
+    # def get_artists(self, artist_id: str):
+    #     # Construct the API URL
+    #     api_url = f"https://api.spotify.com/v1/artists/{artist_id}"
 
-        # Make the API call using the 'requests' library
-        response = self._instance.get(api_url)
+    #     # Make the API call using the 'requests' library
+    #     response = self._instance.get(api_url)
 
-        # Check if the API call was successful (status code 200)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            # Handle error scenarios here
-            return None
+    #     # Check if the API call was successful (status code 200)
+    #     if response.status_code == 200:
+    #         return response.json()
+    #     else:
+    #         # Handle error scenarios here
+    #         return None
