@@ -2,7 +2,6 @@
 #     {'height': 640, 'url': 'https://i.scdn.co/image/ab6761610000e5eba03696716c9ee605006047fd', 'width': 640}, {'height': 320, 'url': 'https://i.scdn.co/image/ab67616100005174a03696716c9ee605006047fd', 'width': 320}, {'height': 160, 'url': 'https://i.scdn.co/image/ab6761610000f178a03696716c9ee605006047fd', 'width': 160}], 'name': 'Radiohead', 'popularity': 78, 'type': 'artist', 'uri': 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'}
 
 def extract_data(data):
-    print(data)
     return {
         "name": data["name"],
         "popularity": data["popularity"],

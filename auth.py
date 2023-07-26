@@ -12,4 +12,6 @@ def getToken():
     }
     auth_response = requests.post(auth_url, data=auth_data)
     auth_response_data = auth_response.json()
+    print('testing')
+    print(auth_response_data)
     return auth_response_data['access_token']
