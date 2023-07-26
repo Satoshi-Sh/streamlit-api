@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 
-@st.cache_data
+@st.cache_data(ttl="30m")
 def getToken():
     auth_url = "https://accounts.spotify.com/api/token"
     auth_data = {
