@@ -5,6 +5,7 @@ This application was created to join Streamlit Hackathon. It data visualizes mus
 ### How to Run
 
 - Run `pip intall`
+- Create secrets.toml according to the sample.secrets.toml. You need to get your client secret from Spotify
 - Run `streamlit run app.py`
 
 ### Live page
