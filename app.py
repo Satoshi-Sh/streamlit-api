@@ -13,7 +13,7 @@ st.title('Stremlit meets Spotify')
 st.write("Visualize data from Spotify API")
 
 access_token = getToken()
-conn = st.experimental_connection(
+conn = st.connection(
     "spotify-api", type=ApiConnection, token=access_token)
 
 # create dataframe to show retrieved data
