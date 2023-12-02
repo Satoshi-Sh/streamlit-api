@@ -41,7 +41,7 @@ rpds-py==0.9.2
 seaborn==0.12.2
 six==1.16.0
 smmap==5.0.0
-streamlit==1.25.0
+streamlit==1.29.0
 tenacity==8.2.2
 toml==0.10.2
 toolz==0.12.0
